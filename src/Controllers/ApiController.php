@@ -12,7 +12,7 @@ class ApiController extends Controller
     protected $allowAnonymous = ['index'];
 
     private $graphQl;
-    private $request;
+    public $request;
 
     function __construct(
         $id,
@@ -35,7 +35,8 @@ class ApiController extends Controller
         return parent::beforeAction($action);
     }
 
-    function actionDebug() {
+    function actionDebug()
+    {
         $instance = \markhuot\CraftQL\CraftQL::getInstance();
 
         $oldMode = \Craft::$app->getView()->getTemplateMode();
@@ -85,25 +86,21 @@ class ApiController extends Controller
         }
 
         Craft::debug('CraftQL: Parsing request');
-        if (Craft::$app->request->isPost && $query=Craft::$app->request->post('query')) {
+        if (Craft::$app->request->isPost && $query = Craft::$app->request->post('query')) {
             $input = $query;
-        }
-        else if (Craft::$app->request->isGet && $query=Craft::$app->request->get('query')) {
+        } else if (Craft::$app->request->isGet && $query = Craft::$app->request->get('query')) {
             $input = $query;
-        }
-        else {
+        } else {
             $data = Craft::$app->request->getRawBody();
             $data = json_decode($data, true);
             $input = @$data['query'];
         }
 
-        if (Craft::$app->request->isPost && $query=Craft::$app->request->post('variables')) {
+        if (Craft::$app->request->isPost && $query = Craft::$app->request->post('variables')) {
             $variables = $query;
-        }
-        else if (Craft::$app->request->isGet && $query=Craft::$app->request->get('variables')) {
+        } else if (Craft::$app->request->isGet && $query = Craft::$app->request->get('variables')) {
             $variables = json_decode($query, true);
-        }
-        else {
+        } else {
             $data = Craft::$app->request->getRawBody();
             $data = json_decode($data, true);
             $variables = @$data['variables'];
